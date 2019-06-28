@@ -1,0 +1,32 @@
+package ast;
+
+public class Retorno extends Comando {
+    private final Expressao expressao;
+    private final int local;
+
+
+    public Retorno(Expressao expressao, int local) {
+        this.expressao = expressao;
+        this.local = local;
+    }
+
+    public Expressao getExpressao() {
+                return this.expressao;
+    }
+
+    public int getLocal(){
+        return this.local;
+    }
+
+    @Override
+    public void printAtDepth(int depth) {
+        System.out.print(" ".repeat(depth*2));
+        System.out.println("[Return]: {");
+
+        expressao.printAtDepth(depth+1);
+
+        System.out.print(" ".repeat(depth*2));
+        System.out.println("}" );
+
+    }
+}
