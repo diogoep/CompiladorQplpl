@@ -13,15 +13,15 @@ public class Codigo extends TreeNode{
         }
     }
 
-    public Codigo(ArrayList<Declaracao> s) {
-        this.declaracoes = s;
+    public Codigo(ArrayList<Declaracao> declaracoes) {
+        this.declaracoes = declaracoes;
     }
 
     public Codigo(){
         this.declaracoes = new ArrayList<>();
     }
 
-    public ArrayList<Declaracao> getS() {
+    public ArrayList<Declaracao> getDeclaracoes() {
         return this.declaracoes;
     }
 

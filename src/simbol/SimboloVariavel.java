@@ -1,5 +1,7 @@
 package simbol;
 
+import ast.Tipo;
+
 public class SimboloVariavel extends Simbolo {
 
     public SimboloVariavel(){

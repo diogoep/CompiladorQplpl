@@ -1,11 +1,18 @@
 package simbol;
-
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 public class TabelaSimbolos{
     TabelaSimbolos tabelaPai;
     private Map<String, Simbolo> mapaSimbolos;
+
+    public TabelaSimbolos(TabelaSimbolos tabelaPai){
+        this.tabelaPai = tabelaPai;
+        this.mapaSimbolos = new HashMap<>();
+    }
+
+    public TabelaSimbolos(){
+    }
 
     public TabelaSimbolos getTabelaPai() {
         return tabelaPai;
