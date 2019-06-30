@@ -2,18 +2,18 @@ package ast;
 
 public class Atribuicao extends Comando {
     //final quer dizer que não pode mudar, e que deve ter um valor atribuido sempre que declarado
-    private final Identificador variavel;
+    private final Identificador identificador;
     private final Expressao expressao;
     private final int local;
 
     public Atribuicao(Identificador varid, Expressao expressao, int local) {
-        this.variavel = varid;
+        this.identificador = varid;
         this.expressao = expressao;
         this.local = local;
     }
 
-    public Identificador getVariavel() {
-        return this.variavel;
+    public Identificador getIdentificador() {
+        return this.identificador;
     }
     public Expressao getExpressao() {
         return this.expressao;
@@ -27,7 +27,7 @@ public class Atribuicao extends Comando {
         System.out.print(" ".repeat(depth*2));
         System.out.println("[AtribuicaoDeVariavel]: {");
 
-        variavel.printAtDepth(depth+1);
+        identificador.printAtDepth(depth+1);
 
         System.out.print(" ".repeat(depth*2));
 

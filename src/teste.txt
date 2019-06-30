@@ -7,23 +7,13 @@
 
 
 
-
-
-
-int pi(){
-    return 3;
-}
-
+int b;
+bool a = 3;
 
 
 
 
 int main(){
-
-    if( true ){
-        return 4;
-    }
-
-    return 99;
+    int a = b;
 
 }

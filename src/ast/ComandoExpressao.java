@@ -4,11 +4,6 @@ public class ComandoExpressao extends Comando {
     private final Expressao expressao;
     private final int local;
 
-
-
-
-
-
     public ComandoExpressao(Expressao expressao, int local) {
         this.expressao = expressao;
         this.local = local;

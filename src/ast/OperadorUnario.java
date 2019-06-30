@@ -6,7 +6,7 @@ public enum OperadorUnario{
     INCREMENTOESQUERDA,
     INCREMENTODIREITA,
     DECRESCIMOESQUERDA,
-    DECRESCIMODIREITA,
-    VALOR //precisamos representar uma expressao que contem apenas o valor da variavel (no folha)
+    DECRESCIMODIREITA
+    //VALOR //precisamos representar uma expressao que contem apenas o valor da variavel (no folha)
 
 }

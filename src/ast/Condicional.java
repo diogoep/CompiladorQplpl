@@ -9,7 +9,6 @@ public class Condicional extends Comando {
 
     //SE SO TIVER IF
     public Condicional( Expressao expressao, Comando comandoIf, int local){
-
         this.condicao = expressao;
         this.codigoIf = comandoIf;
         this.codigoElse = null;
@@ -18,7 +17,6 @@ public class Condicional extends Comando {
 
     //SE TIVER IF E ELSE
     public Condicional( Expressao expressao, Comando codigoIf, Comando codigoElse , int local){
-
         this.condicao = expressao;
         this.codigoIf = codigoIf;
         this.codigoElse = codigoElse;

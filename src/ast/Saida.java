@@ -2,17 +2,17 @@ package ast;
 
 import java.util.ArrayList;
 
-public class Resultado extends Comando {
+public class Saida extends Comando {
     private final ArrayList<Expressao> parametros;
     private final int local;
 
 
-    public Resultado(int local) {
+    public Saida(int local) {
         this.parametros = new ArrayList<>();
         this.local = local;
     }
 
-    public Resultado(ArrayList<Expressao> parameters, int local) {
+    public Saida(ArrayList<Expressao> parameters, int local) {
         this.parametros = parameters;
         this.local = local;
     }
@@ -29,7 +29,7 @@ public class Resultado extends Comando {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[Resultado]: {");
+        System.out.println("[Saida]: {");
 
 
         for(Expressao e : parametros) {

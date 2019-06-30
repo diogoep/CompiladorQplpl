@@ -1,3 +1,4 @@
+import ast.Codigo;
 import ast.Programa;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -22,9 +23,8 @@ public class Main {
 
             // Análise Semântica
             QplplChecker checker = new QplplChecker(prog);
-
-            System.out.println(checker.check());
-            System.out.println(checker.mostrarErros());
+            checker.check();
+            checker.mostrarErros();
 
 
         } catch (Exception e) {

@@ -5,7 +5,6 @@ public class Tipo extends TreeNode {
     private final TipoValor tipo;
     private final String tipoEstrutura;
 
-
     //tipo pode ser int, char, string e tals.
     //mas precisamos representar tambem as estruturas
 

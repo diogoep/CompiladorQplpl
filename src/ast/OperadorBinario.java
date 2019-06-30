@@ -12,5 +12,5 @@ public enum OperadorBinario {
     SUBTRACAO,
     MULTIPLICACAO,
     DIVISAO,
-    MOD,
+    MOD
 }

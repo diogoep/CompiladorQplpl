@@ -9,5 +9,5 @@ public enum TipoValor {
     STRING,
     ESTRUTURA,
     FUNCAO,
-    INDEFINIDO
+    INDETERMINADO
 }

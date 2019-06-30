@@ -430,7 +430,7 @@ public class QplplTranslator extends QplplBaseVisitor<TreeNode> {
         for (QplplParser.ExpressaoContext p : ctx.expressao()) {
             parameters.add((Expressao) visit(p));
         }
-        return new Resultado(parameters, ctx.getStart().getLine());
+        return new Saida(parameters, ctx.getStart().getLine());
     }
 
     @Override public Comando visitBloco(QplplParser.BlocoContext ctx) {

@@ -1,4 +1,4 @@
-package simbol;
+/*package simbol;
 
 import ast.*;
 
@@ -64,4 +64,4 @@ public class BuscaSimbolo {
         return this.categoria;
     }
 
-}
+}*/

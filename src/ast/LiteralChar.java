@@ -3,7 +3,7 @@ public class LiteralChar extends Expressao {
     private final char conteudo;
 
     public LiteralChar(String text, int local) {
-        conteudo = text.charAt(0);
+        conteudo = text.charAt(1);
     }
 
     public LiteralChar(char value, int local) {

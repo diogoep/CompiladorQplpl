@@ -23,4 +23,12 @@ public class Erro {
     public void setLocal(int local) {
         this.local = local;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "mensagem='" + mensagem + '\'' +
+                ", local=" + local +
+                '}';
+    }
 }
