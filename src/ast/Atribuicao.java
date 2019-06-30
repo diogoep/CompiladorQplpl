@@ -6,10 +6,10 @@ public class Atribuicao extends Comando {
     private final Expressao expressao;
     private final int local;
 
-    public Atribuicao(Identificador varid, Expressao expressao) {
+    public Atribuicao(Identificador varid, Expressao expressao, int local) {
         this.identificador = varid;
         this.expressao = expressao;
-        this.local = 0;
+        this.local = local;
     }
 
     public Identificador getIdentificador() {

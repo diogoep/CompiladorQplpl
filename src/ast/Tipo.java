@@ -42,6 +42,8 @@ public class Tipo extends TreeNode {
             valor += "void";
         }else if (tipo == TipoValor.ESTRUTURA){
             valor += "estrutura: " + this.tipoEstrutura;
+        }else if (tipo == TipoValor.INDETERMINADO){
+            valor += "indeterminado";
         }
         valor += "]";
         //FINAL EXPRESSAO

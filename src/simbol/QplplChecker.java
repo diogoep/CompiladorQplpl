@@ -8,6 +8,18 @@ public class QplplChecker {
     private Programa codigo;
     private TabelaSimbolos tabelaGlobal;
     private ArrayList<Erro> erros;
+    private DeclaracaoFuncao principal;
+    private int quantidadePrincipal;
+
+
+    public DeclaracaoFuncao getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(DeclaracaoFuncao principal) {
+        this.principal = principal;
+    }
+
 
     public QplplChecker(Programa codigo) {
         this.codigo = codigo;
@@ -23,6 +35,10 @@ public class QplplChecker {
         for (Declaracao declaracao : codigo.getDeclaracoes()) {
             visit(declaracao, tabelaSimbolos);
         }
+        if(quantidadePrincipal == 0){
+            erros.add(new Erro("Código sem função main!",0));
+        }
+
     }
 
     public void visit(Declaracao declaracao, TabelaSimbolos tabelaSimbolos) {
@@ -44,6 +60,18 @@ public class QplplChecker {
         TabelaSimbolos tabelaBloco = new TabelaSimbolos(tabelaSimbolos);
         //TODO MAS UM BLOCO PODE TER TANTO DECLARACOES DE VARIAVEIS QUANTO COMANDOS, NÃO DEVEMOS IMPLEMENTAR A "VISITA" AOS COMANDOS NESSE CASO TAMBÉM?
         //Tratamento dos parametros da função
+
+
+        //tratar multiplas mains
+        if(declaracaoFuncao.getIdentificadorFuncao().equals("main")){
+            quantidadePrincipal++;
+            principal = declaracaoFuncao;
+            if(quantidadePrincipal > 1){
+                erros.add(new Erro("Não é possível ter mais de uma main!", declaracaoFuncao.getLocal()));
+            }
+        }
+
+
         for (DeclaracaoVariavel declaracaoVariavel : declaracaoFuncao.getParametros().getParametros()) {
             //Agora sim
             Erro erro = new Erro("", declaracaoFuncao.getLocal());
@@ -71,7 +99,6 @@ public class QplplChecker {
         if (!tabelaSimbolos.adicionarSimbolo(simboloVariavel, erro)) {
             erros.add(erro);
         }
-        System.err.println("ieaofa");
         //VERIFICAR SE EXISTE EXPRESSAO DO LADO DIREITO DA DECLARACAO;
         if(declaracaoVariavel.getExpressao() != null){
             InfoExpressao infoExpressao = new InfoExpressao();
@@ -80,6 +107,7 @@ public class QplplChecker {
             //TODO COMO ELE JÁ LEU O LADO ESQUERDO DA DECLARACAO, O LADO DIREITO SÓ SE ENCAIXA EM UMA EXPRESSAO NOMEADA, NAO UMA EXPRESSAO BINARIA, JÁ QUE NA EXPRESSAO NAO VAI TER O OPERANDO INICIAL
             //TODO SE O LADO DIREITO FOR UMA EXPRESSAO, TEM QUE SER UMA ATRIBUIÇÃO
             //Atribuicao atribuicao = new Atribuicao(simboloVariavel, declaracaoVariavel.getExpressao());
+            //System.out.println("fgjrsnog jnsrojg norsj ngoj snojn sojng ojsnr ojng ojnrs ojgns ojn go jns r ojn gojng orsjn orsjn ojnsr o");
             if(!infoExpressao.getTipoRetornado().equals(declaracaoVariavel.getTipo())){
                 //TODO NAO EXISTEM VARIAVEIS BOOL
                 Erro erroTipo = new Erro("O tipo esperado é " + declaracaoVariavel.getTipo() + " porém o tipo recebido foi " + infoExpressao.getTipoRetornado(), declaracaoVariavel.getLocal());
@@ -90,13 +118,9 @@ public class QplplChecker {
     }
 
     public void visit(Bloco bloco, TabelaSimbolos tabelaBloco) {
-        for (DeclaracaoVariavel declaracaoVariavel : bloco.getDefinicoes()) {
-            Erro erro = new Erro("", declaracaoVariavel.getLocal());
-            SimboloVariavel simboloVariavel = new SimboloVariavel(declaracaoVariavel.getTipo(), declaracaoVariavel.getIdentificadorVariavel());
-            if (!tabelaBloco.adicionarSimbolo(simboloVariavel, erro)) {
-                erros.add(erro);
-            }
 
+        for (DeclaracaoVariavel declaracaoVariavel : bloco.getDefinicoes()) {
+            visit(declaracaoVariavel, tabelaBloco);
         }
 
         for (Comando comando : bloco.getComandos()) {
@@ -105,6 +129,7 @@ public class QplplChecker {
     }
 
     public void visit(Comando comando, TabelaSimbolos tabelaBloco) {
+
         if (comando instanceof Atribuicao) {
             visit((Atribuicao) comando, tabelaBloco);
         } else if (comando instanceof Break) {
@@ -121,13 +146,16 @@ public class QplplChecker {
             visit((Saida) comando, tabelaBloco);
         } else if (comando instanceof Retorno) {
             visit((Retorno) comando, tabelaBloco);
+        } else if (comando instanceof Bloco) {
+            visit((Bloco) comando, tabelaBloco);
         }
     }
 
     public void visit(Atribuicao atribuicao, TabelaSimbolos tabelaBloco) {
         InfoExpressao infoExpressao = new InfoExpressao();
         String identificador = "";
-        if (atribuicao.getIdentificador() instanceof ChamadaFuncao) {
+        if (atribuicao.getIdentificador() instanceof ChamadaFuncao){
+            //TODO TEM QUE FAZER ELE VISITAR O CHAMADA FUNÇÃO TAMBÉM, NÃO É?
             identificador = ((ChamadaFuncao) atribuicao.getIdentificador()).getId();
         } else if (atribuicao.getIdentificador() instanceof ChamadaVariavel) {
             identificador = ((ChamadaVariavel) atribuicao.getIdentificador()).getIdentificadorFuncao();
@@ -236,7 +264,7 @@ public class QplplChecker {
                 || (expressao.getOperador() == OperadorBinario.MOD) || (expressao.getOperador() == OperadorBinario.MAIOR)
                 || (expressao.getOperador() == OperadorBinario.MAIORIGUAL) || (expressao.getOperador() == OperadorBinario.MENOR)
                 || (expressao.getOperador() == OperadorBinario.MENORIGUAL)) {
-            System.err.println(expressao.getOperador() + " e " + infoExpressaoDireita.getTipoRetornado().getTipo() + " e " + infoExpressaoEsquerda.getTipoRetornado().getTipo());
+            //System.err.println(expressao.getOperador() + " e " + infoExpressaoDireita.getTipoRetornado().getTipo() + " e " + infoExpressaoEsquerda.getTipoRetornado().getTipo());
             if (infoExpressaoDireita.getTipoRetornado().getTipo() != TipoValor.INTEIRO || infoExpressaoEsquerda.getTipoRetornado().getTipo() != TipoValor.INTEIRO) {
                 erros.add(new Erro("Operador " + expressao.getOperador() + " somente válido para inteiros!", expressao.getLocal()));
 
@@ -251,7 +279,7 @@ public class QplplChecker {
             if (infoExpressaoDireita.getTipoRetornado().getTipo() != infoExpressaoEsquerda.getTipoRetornado().getTipo()) {
                 erros.add(new Erro("O tipo " + infoExpressaoEsquerda.getTipoRetornado().getTipo() + " não é compatível com o tipo " + infoExpressaoDireita.getTipoRetornado().getTipo() + "!" , expressao.getLocal()));
             }
-            infoExpressao.setTipoRetornado(new Tipo(infoExpressaoDireita.getTipoRetornado().getTipo()));
+            infoExpressao.setTipoRetornado(new Tipo(TipoValor.BOOL));
         }
     }
 
@@ -291,6 +319,7 @@ public class QplplChecker {
         if (simbolo == null){
             erros.add(erro);
             infoExpressao.setTipoRetornado(new Tipo(TipoValor.INDETERMINADO));
+
         }else{
             infoExpressao.setTipoRetornado(new Tipo(simbolo.getTipo().getTipo()));
         }
@@ -312,12 +341,18 @@ public class QplplChecker {
         infoExpressao.setTipoRetornado(new Tipo(TipoValor.INTEIRO));
     }
 
-    public void mostrarErros(){
-        String erros = "l de erros: \n";
-        for(Erro erro: this.erros){
-            erros+= erro + "\n";
+    public boolean mostrarErros() {
+        if (erros.size() > 0) {
+            String erros = "Erros : \n";
+            for (Erro erro : this.erros) {
+                erros += erro + "\n";
+            }
+            System.err.println(erros);
+            return true;
+        }else{
+            return false;
         }
-        System.err.println(erros);
+
     }
 
 }

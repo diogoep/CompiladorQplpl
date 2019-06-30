@@ -1,0 +1,29 @@
+package  intermediary;
+
+public enum Operador{
+    IGUAL,
+    DIFERENTE,
+    SOMA,
+    SUBTRACAO,
+    DIVISAO,
+    MULTIPLICACAO,
+    ATRIBUICAO,
+    MOD,
+    GOTO,
+    IFGOTO,
+    IFFALSEGOTO,
+    LABEL,
+    MAIORIGUAL,
+    MENORIGUAL,
+    MAIOR,
+    MENOR,
+    NOT,
+    MAIS,
+    MENOS,
+    AND,
+    OR,
+    DECRESCIMODIREITA,
+    DECRESCIMOESQUERDA,
+    INCREMENTODIREITA,
+    INCREMENTOESQUERDA
+}

@@ -26,7 +26,7 @@ public class ExpressaoUnaria extends Expressao {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[ExpressaoUnaria] " + this.expressao);
+        System.out.println("[ExpressaoUnaria] " );
         expressao.printAtDepth(depth+1);
     }
 }

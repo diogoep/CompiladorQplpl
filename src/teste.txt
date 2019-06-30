@@ -3,17 +3,20 @@
 
 
 
-int a=b;
-
-
-
-
 
 
 
 int main(){
-int a = b;
-if(a==b){
-b=c+'d';
-}
+
+    int x = 1;
+    int e = 5;
+    bool t = true;
+
+    if(t){
+        x = x * 2;
+        e = e - 1;
+    } else {
+        x = x / 2;
+        e = e + 1;
+    }
 }
