@@ -45,7 +45,7 @@ public class QplplTranslator extends QplplBaseVisitor<TreeNode> {
     }
 
     @Override public DeclaracaoVariavel visitIniciaVariavelComValor(QplplParser.IniciaVariavelComValorContext ctx) {
-        return new DeclaracaoVariavel((Tipo)visit(ctx.tipo()), ctx.ID().getText(), (Expressao) visit(ctx.expressao()), ctx.getStart().getLine());
+        return new DeclaracaoVariavel((Tipo) visit(ctx.tipo()), ctx.ID().getText(), (Expressao) visit(ctx.expressao()), ctx.getStart().getLine());
     }
 
 

@@ -6,7 +6,7 @@ import simbol.QplplChecker;
 import interpreter.*;
 public class Main {
 
-
+//TODO SE DECLARAR E DEPOIS ATRIBUIR FUNCIONA, MAS SE DECLARAR E ATRIBUIR NA MESMA LINHA NAO FUNCIONA
     public static void main(String[] args) {
         try {
             QplplLexer lexer = new QplplLexer(CharStreams.fromFileName("/home/diogo/Downloads/QPP1-master/src/teste.txt"));

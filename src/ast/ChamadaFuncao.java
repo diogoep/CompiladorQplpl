@@ -2,8 +2,8 @@ package ast;
 
 public class ChamadaFuncao extends Identificador {
 
-    protected final String id;
-    protected final Identificador proximo;
+    private final String id;
+    private final Identificador proximo;
     private final ParametroReal parametros;
     private final int local;
 

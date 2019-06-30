@@ -30,6 +30,12 @@ public class QplplChecker {
             visit((DeclaracaoVariavel) declaracao, tabelaSimbolos);
         } else if (declaracao instanceof DeclaracaoFuncao) {
             visit((DeclaracaoFuncao) declaracao, tabelaSimbolos);
+        }else if(declaracao instanceof DeclaracaoEstrutura){
+
+        }else if(declaracao instanceof DeclaracaoMetodo){
+
+        }else if(declaracao instanceof DeclaracaoAtributo){
+
         }
     }
 
@@ -46,7 +52,7 @@ public class QplplChecker {
                 //Caso de erro. Já que há um parametro com o mesmo nome.
                 erros.add(erro);
             } else {
-                tabelaBloco.adicionarSimbolo(new SimboloVariavel(parametro.getTipo(), parametro.getIdentificador()), erro);
+                    tabelaBloco.adicionarSimbolo(new SimboloVariavel(parametro.getTipo(), parametro.getIdentificador()), erro);
             }
         }
 
@@ -54,26 +60,33 @@ public class QplplChecker {
         if (!tabelaSimbolos.adicionarSimbolo(simboloFuncao, erro)) {
             erros.add(erro);
         }
+
         visit(declaracaoFuncao.getBloco(), tabelaBloco);
+
     }
 
     public void visit(DeclaracaoVariavel declaracaoVariavel, TabelaSimbolos tabelaSimbolos) {
         SimboloVariavel simboloVariavel = new SimboloVariavel(declaracaoVariavel.getTipo(), declaracaoVariavel.getIdentificadorVariavel());
         Erro erro = new Erro("", declaracaoVariavel.getLocal());
+        if (!tabelaSimbolos.adicionarSimbolo(simboloVariavel, erro)) {
+            erros.add(erro);
+        }
         System.err.println("ieaofa");
         //VERIFICAR SE EXISTE EXPRESSAO DO LADO DIREITO DA DECLARACAO;
         if(declaracaoVariavel.getExpressao() != null){
             InfoExpressao infoExpressao = new InfoExpressao();
             visit(declaracaoVariavel.getExpressao(), tabelaSimbolos, infoExpressao);
             //VERIFICAR O TIPO DO LADO DIREITO E DA VARIAVEL, PRA VER SE SAO COMPATIVEIS
+            //TODO COMO ELE JÁ LEU O LADO ESQUERDO DA DECLARACAO, O LADO DIREITO SÓ SE ENCAIXA EM UMA EXPRESSAO NOMEADA, NAO UMA EXPRESSAO BINARIA, JÁ QUE NA EXPRESSAO NAO VAI TER O OPERANDO INICIAL
+            //TODO SE O LADO DIREITO FOR UMA EXPRESSAO, TEM QUE SER UMA ATRIBUIÇÃO
+            //Atribuicao atribuicao = new Atribuicao(simboloVariavel, declaracaoVariavel.getExpressao());
             if(!infoExpressao.getTipoRetornado().equals(declaracaoVariavel.getTipo())){
-                Erro erroTipo = new Erro("O tipo esperado é " + declaracaoVariavel + " porém o tipo recebido foi " + infoExpressao.getTipoRetornado(), declaracaoVariavel.getLocal());
+                //TODO NAO EXISTEM VARIAVEIS BOOL
+                Erro erroTipo = new Erro("O tipo esperado é " + declaracaoVariavel.getTipo() + " porém o tipo recebido foi " + infoExpressao.getTipoRetornado(), declaracaoVariavel.getLocal());
                 erros.add(erroTipo);
             }
         }
-        if (!tabelaSimbolos.adicionarSimbolo(simboloVariavel, erro)) {
-            erros.add(erro);
-        }
+
     }
 
     public void visit(Bloco bloco, TabelaSimbolos tabelaBloco) {
@@ -133,6 +146,7 @@ public class QplplChecker {
         if (infoExpressao.getTipoRetornado().getTipo() != TipoValor.BOOL) {
             Erro erro = new Erro("A expressão não é do tipo bool! É do tipo" + infoExpressao.getTipoRetornado(), condicional.getLocal());
             erros.add(erro);
+            System.err.println();
         }
         visit(condicional.getCodigoIf(), tabelaBloco);
         if (condicional.getCodigoElse() != null) {
@@ -222,8 +236,10 @@ public class QplplChecker {
                 || (expressao.getOperador() == OperadorBinario.MOD) || (expressao.getOperador() == OperadorBinario.MAIOR)
                 || (expressao.getOperador() == OperadorBinario.MAIORIGUAL) || (expressao.getOperador() == OperadorBinario.MENOR)
                 || (expressao.getOperador() == OperadorBinario.MENORIGUAL)) {
+            System.err.println(expressao.getOperador() + " e " + infoExpressaoDireita.getTipoRetornado().getTipo() + " e " + infoExpressaoEsquerda.getTipoRetornado().getTipo());
             if (infoExpressaoDireita.getTipoRetornado().getTipo() != TipoValor.INTEIRO || infoExpressaoEsquerda.getTipoRetornado().getTipo() != TipoValor.INTEIRO) {
                 erros.add(new Erro("Operador " + expressao.getOperador() + " somente válido para inteiros!", expressao.getLocal()));
+
             }
             infoExpressao.setTipoRetornado(new Tipo(TipoValor.INTEIRO));
         }else if ((expressao.getOperador() == OperadorBinario.AND) || (expressao.getOperador() == OperadorBinario.OR)) {
@@ -263,12 +279,14 @@ public class QplplChecker {
 
     public void visit(ExpressaoNomeada expressaoNomeada, TabelaSimbolos tabelaBloco, InfoExpressao infoExpressao){
         String identificador = "";
-        if (expressaoNomeada.getIdentificador() instanceof ChamadaFuncao) {
+        if (expressaoNomeada.getIdentificador() instanceof ChamadaFuncao){
             identificador = ((ChamadaFuncao) expressaoNomeada.getIdentificador()).getId();
         } else if (expressaoNomeada.getIdentificador() instanceof ChamadaVariavel) {
             identificador = ((ChamadaVariavel) expressaoNomeada.getIdentificador()).getIdentificadorFuncao();
         }//NOME NÃO É EXPRESSAO      a = a + 1    a+1 = a
         Erro erro = new Erro("", expressaoNomeada.getLocal());
+        //TODO O ALGORITMO DEVERIA RETORNAR O ERRO AQUI!!!!!!!
+        //TODO ACHO QUE O ALGORITMO NAO ESTA PROCESSANDO OS COMANDOS, SÓ AS EXPRESSOES
         Simbolo simbolo = tabelaBloco.buscarSimbolo(identificador, erro);
         if (simbolo == null){
             erros.add(erro);

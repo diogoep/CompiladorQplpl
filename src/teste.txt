@@ -3,17 +3,17 @@
 
 
 
+int a=b;
 
 
 
-
-int b;
-bool a = 3;
 
 
 
 
 int main(){
-    int a = b;
-
+int a = b;
+if(a==b){
+b=c+'d';
+}
 }
