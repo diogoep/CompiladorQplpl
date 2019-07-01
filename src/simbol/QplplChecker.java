@@ -2,11 +2,10 @@ package simbol;
 
 import ast.*;
 
-import javax.print.DocFlavor;
 import java.util.ArrayList;
 
 public class QplplChecker {
-    private Programa codigo;
+    private Codigo codigo;
     private TabelaSimbolos tabelaGlobal;
     private ArrayList<Erro> erros;
     private DeclaracaoFuncao principal;
@@ -17,12 +16,12 @@ public class QplplChecker {
         return principal;
     }
 
-    public void setPrincipal(DeclaracaoFuncao principal) {
+    public void setPrinipal(DeclaracaoFuncao principal) {
         this.principal = principal;
     }
 
 
-    public QplplChecker(Programa codigo) {
+    public QplplChecker(Codigo codigo) {
         this.codigo = codigo;
     }
 
@@ -32,7 +31,7 @@ public class QplplChecker {
         this.visit(this.codigo, tabelaGlobal);
     }
 
-    public void visit(Programa codigo, TabelaSimbolos tabelaSimbolos) {
+    public void visit(Codigo codigo, TabelaSimbolos tabelaSimbolos) {
         for (Declaracao declaracao : codigo.getDeclaracoes()) {
             visit(declaracao, tabelaSimbolos);
         }
@@ -45,7 +44,7 @@ public class QplplChecker {
     public void visit(Declaracao declaracao, TabelaSimbolos tabelaSimbolos) {
 
         if (declaracao instanceof DeclaracaoVariavel) {
-            visit((DeclaracaoVariavel) declaracao, tabelaSimbolos);
+            visit(declaracao, tabelaSimbolos);
         } else if (declaracao instanceof DeclaracaoFuncao) {
             visit((DeclaracaoFuncao) declaracao, tabelaSimbolos);
         }else if(declaracao instanceof DeclaracaoEstrutura){
@@ -60,10 +59,6 @@ public class QplplChecker {
     public void visit(DeclaracaoFuncao declaracaoFuncao, TabelaSimbolos tabelaSimbolos) {
         SimboloFuncao simboloFuncao = new SimboloFuncao(declaracaoFuncao.getTipo(), declaracaoFuncao.getIdentificadorFuncao());
         TabelaSimbolos tabelaBloco = new TabelaSimbolos(tabelaSimbolos);
-        InfoBloco infoBloco = new InfoBloco(((DeclaracaoFuncao) declaracaoFuncao).getTipo());
-        //TODO MAS UM BLOCO PODE TER TANTO DECLARACOES DE VARIAVEIS QUANTO COMANDOS, NÃO DEVEMOS IMPLEMENTAR A "VISITA" AOS COMANDOS NESSE CASO TAMBÉM?
-        //Tratamento dos parametros da função
-
 
         //tratar multiplas mains
         if(declaracaoFuncao.getIdentificadorFuncao().equals("main")){
@@ -74,9 +69,8 @@ public class QplplChecker {
             }
         }
 
-
+        //Tratamento dos parametros da função
         for (DeclaracaoVariavel declaracaoVariavel : declaracaoFuncao.getParametros().getParametros()) {
-            //Agora sim
             Erro erro = new Erro("", declaracaoFuncao.getLocal());
             Parametro parametro = new Parametro(declaracaoVariavel.getTipo(), declaracaoVariavel.getIdentificadorVariavel());
             if (!simboloFuncao.addParametro(parametro, erro)) {
@@ -105,17 +99,12 @@ public class QplplChecker {
         if (!tabelaSimbolos.adicionarSimbolo(simboloVariavel, erro)) {
             erros.add(erro);
         }
-        //VERIFICAR SE EXISTE EXPRESSAO DO LADO DIREITO DA DECLARACAO;
+
         if(declaracaoVariavel.getExpressao() != null){
             InfoExpressao infoExpressao = new InfoExpressao();
             visit(declaracaoVariavel.getExpressao(), tabelaSimbolos, infoExpressao);
-            //VERIFICAR O TIPO DO LADO DIREITO E DA VARIAVEL, PRA VER SE SAO COMPATIVEIS
-            //TODO COMO ELE JÁ LEU O LADO ESQUERDO DA DECLARACAO, O LADO DIREITO SÓ SE ENCAIXA EM UMA EXPRESSAO NOMEADA, NAO UMA EXPRESSAO BINARIA, JÁ QUE NA EXPRESSAO NAO VAI TER O OPERANDO INICIAL
-            //TODO SE O LADO DIREITO FOR UMA EXPRESSAO, TEM QUE SER UMA ATRIBUIÇÃO
-            //Atribuicao atribuicao = new Atribuicao(simboloVariavel, declaracaoVariavel.getExpressao());
-            //System.out.println("fgjrsnog jnsrojg norsj ngoj snojn sojng ojsnr ojng ojnrs ojgns ojn go jns r ojn gojng orsjn orsjn ojnsr o");
+            //VERIFICANDO O TIPO DO LADO DIREITO E DA VARIAVEL, PRA VER SE SAO COMPATIVEIS
             if(!infoExpressao.getTipoRetornado().equals(declaracaoVariavel.getTipo())){
-                //TODO NAO EXISTEM VARIAVEIS BOOL
                 Erro erroTipo = new Erro("O tipo esperado é " + declaracaoVariavel.getTipo() + " porém o tipo recebido foi " + infoExpressao.getTipoRetornado(), declaracaoVariavel.getLocal());
                 erros.add(erroTipo);
             }
@@ -161,17 +150,15 @@ public class QplplChecker {
         InfoExpressao infoExpressao = new InfoExpressao();
         String identificador = "";
         if (atribuicao.getIdentificador() instanceof ChamadaFuncao){
-            //TODO TEM QUE FAZER ELE VISITAR O CHAMADA FUNÇÃO TAMBÉM, NÃO É?
             identificador = ((ChamadaFuncao) atribuicao.getIdentificador()).getId();
         } else if (atribuicao.getIdentificador() instanceof ChamadaVariavel) {
             identificador = ((ChamadaVariavel) atribuicao.getIdentificador()).getIdentificadorFuncao();
-        }//NOME NÃO É EXPRESSAO      a = a + 1    a+1 = a
+        }//IDENTIFICADO NÃO É EXPRESSAO      a = a + 1    a+1 = a
         visit(atribuicao.getExpressao(), tabelaBloco, infoExpressao);
         Erro erro = new Erro("", atribuicao.getLocal());
         if (tabelaBloco.buscarSimbolo(identificador, erro) == null) {
             erros.add(erro);
         }
-        //TODO CHECAGEM DE TIPOS DO IDENTIFICADOR
     }
 
     public void visit(Condicional condicional, TabelaSimbolos tabelaBloco, InfoBloco infoBloco) {
@@ -198,7 +185,6 @@ public class QplplChecker {
             Erro erro = new Erro("Não é possível utilizar break fora de um laço!", breique.getLocal());
             erros.add(erro);
         }
-        //TODO Verificar se está dentro do while
     }
 
     public void visit(ComandoExpressao comandoExpressao, TabelaSimbolos tabelaBloco, InfoBloco infoBloco) {
@@ -250,7 +236,6 @@ public class QplplChecker {
             erros.add(erro);
         }
         infoBloco.setGaranteRetorno(true);
-        //TODO CHECAGEM DE ERRO
     }
 
     public void visit(Expressao expressao, TabelaSimbolos tabelaBloco, InfoExpressao infoExpressao) {
@@ -277,18 +262,13 @@ public class QplplChecker {
         InfoExpressao infoExpressaoDireita = new InfoExpressao();
         visit(expressao.getExpressaoDireita(), tabelaBloco, infoExpressaoEsquerda);
         visit(expressao.getExpressaoEsquerda(), tabelaBloco, infoExpressaoDireita);
-        /*Erro erro = new Erro()
-        if(infoExpressaoDireita != infoExpressaoEsquerda){
-        }*/
         if ((expressao.getOperador() == OperadorBinario.SOMA) || (expressao.getOperador() == OperadorBinario.SUBTRACAO)
                 || (expressao.getOperador() == OperadorBinario.DIVISAO) || (expressao.getOperador() == OperadorBinario.MULTIPLICACAO)
                 || (expressao.getOperador() == OperadorBinario.MOD) || (expressao.getOperador() == OperadorBinario.MAIOR)
                 || (expressao.getOperador() == OperadorBinario.MAIORIGUAL) || (expressao.getOperador() == OperadorBinario.MENOR)
                 || (expressao.getOperador() == OperadorBinario.MENORIGUAL)) {
-            //System.err.println(expressao.getOperador() + " e " + infoExpressaoDireita.getTipoRetornado().getTipo() + " e " + infoExpressaoEsquerda.getTipoRetornado().getTipo());
             if (infoExpressaoDireita.getTipoRetornado().getTipo() != TipoValor.INTEIRO || infoExpressaoEsquerda.getTipoRetornado().getTipo() != TipoValor.INTEIRO) {
                 erros.add(new Erro("Operador " + expressao.getOperador() + " somente válido para inteiros!", expressao.getLocal()));
-
             }
             infoExpressao.setTipoRetornado(new Tipo(TipoValor.INTEIRO));
         }else if ((expressao.getOperador() == OperadorBinario.AND) || (expressao.getOperador() == OperadorBinario.OR)) {
@@ -307,10 +287,6 @@ public class QplplChecker {
     public void visit(ExpressaoUnaria expressao, TabelaSimbolos tabelaBloco, InfoExpressao infoExpressao) {
         InfoExpressao infoExpressaoInterna = new InfoExpressao();
         visit(expressao.getExpressao(),tabelaBloco,infoExpressaoInterna);
-        /*Erro erro = new Erro()
-        if(infoExpressaoDireita != infoExpressaoEsquerda){
-        }*/
-        //TODO PARAR ANALISE SE ALGUMA RETORNAR UM ERRO
         if ((expressao.getOperador() == OperadorUnario.MAIS) || (expressao.getOperador() == OperadorUnario.MENOS)
                 || (expressao.getOperador() == OperadorUnario.DECRESCIMODIREITA) || (expressao.getOperador() == OperadorUnario.INCREMENTODIREITA)
                 || (expressao.getOperador() == OperadorUnario.DECRESCIMOESQUERDA) || (expressao.getOperador() == OperadorUnario.INCREMENTOESQUERDA)){
@@ -332,10 +308,8 @@ public class QplplChecker {
             identificador = ((ChamadaFuncao) expressaoNomeada.getIdentificador()).getId();
         } else if (expressaoNomeada.getIdentificador() instanceof ChamadaVariavel) {
             identificador = ((ChamadaVariavel) expressaoNomeada.getIdentificador()).getIdentificadorFuncao();
-        }//NOME NÃO É EXPRESSAO      a = a + 1    a+1 = a
+        }//NOME OU IDENTIFICADOR NÃO É EXPRESSAO      a = a + 1    a+1 = a
         Erro erro = new Erro("", expressaoNomeada.getLocal());
-        //TODO O ALGORITMO DEVERIA RETORNAR O ERRO AQUI!!!!!!!
-        //TODO ACHO QUE O ALGORITMO NAO ESTA PROCESSANDO OS COMANDOS, SÓ AS EXPRESSOES
         Simbolo simbolo = tabelaBloco.buscarSimbolo(identificador, erro);
         if (simbolo == null){
             erros.add(erro);

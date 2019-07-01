@@ -25,6 +25,6 @@ public class LiteralInteiro extends Expressao {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[LiteralInteiro]: " + this.conteudo);
+        System.out.println("[Literal Inteiro]: " + this.conteudo);
     }
 }

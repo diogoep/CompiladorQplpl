@@ -25,6 +25,6 @@ public class LiteralBool extends Expressao {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[LiteralBool]: " + this.conteudo);
+        System.out.println("[Literal Bool]: " + this.conteudo);
     }
 }

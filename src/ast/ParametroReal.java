@@ -23,7 +23,7 @@ public class ParametroReal extends TreeNode {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[ParametrosReais]: {");
+        System.out.println("[Parametros Reais]: {");
 
 
         for(Expressao e : parametros) {

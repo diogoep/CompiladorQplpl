@@ -27,8 +27,8 @@ public class Erro {
     @Override
     public String toString() {
         return "{" +
-                "mensagem='" + mensagem + '\'' +
-                ", local=" + local +
+                "Mensagem='" + mensagem + '\'' +
+                ", Local=" + local +
                 '}';
     }
 }

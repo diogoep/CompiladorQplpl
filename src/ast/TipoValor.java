@@ -8,6 +8,5 @@ public enum TipoValor {
     VOID,
     STRING,
     ESTRUTURA,
-    FUNCAO,
     INDETERMINADO
 }

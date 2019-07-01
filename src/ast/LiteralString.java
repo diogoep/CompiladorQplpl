@@ -19,6 +19,6 @@ public class LiteralString extends Expressao {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[LiteralString]: " + this.conteudo);
+        System.out.println("[Literal String]: " + this.conteudo);
     }
 }

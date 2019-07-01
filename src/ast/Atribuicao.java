@@ -25,7 +25,7 @@ public class Atribuicao extends Comando {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[AtribuicaoDeVariavel]: {");
+        System.out.println("[Atribuicao De Variavel]: {");
 
         identificador.printAtDepth(depth+1);
 
@@ -38,6 +38,3 @@ public class Atribuicao extends Comando {
         System.out.println("}");
     }
 }
-
-
-//fodase

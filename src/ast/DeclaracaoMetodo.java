@@ -9,14 +9,10 @@ public class DeclaracaoMetodo extends Declaracao {
     private final Tipo tipo;
     private final int local;
 
-    //tipo pode ser int, char, string e tals.
-    //mas precisamos representar tambem as estruturas
-
     public DeclaracaoMetodo(boolean constante, boolean estatico, DeclaracaoFuncao funcao) {
         this.constante = constante;
         this.estatico = estatico;
         this.tipo = funcao.getTipo();
-
         this.identificadorMetodo = funcao.getIdentificadorFuncao();
         this.bloco = funcao.getBloco();
         this.local = funcao.getLocal();
@@ -69,10 +65,10 @@ public class DeclaracaoMetodo extends Declaracao {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[DeclaracaoMetodo]: {");
+        System.out.println("[Declaracao Metodo]: {");
 
         System.out.print(" ".repeat(depth*2));
-        System.out.println("Nome: " + this.identificadorMetodo + ", Tipo: " + this.tipo);
+        System.out.println("Identificador: " + this.identificadorMetodo + ", Tipo: " + this.tipo);
 
 
         System.out.print(" ".repeat(depth*2));

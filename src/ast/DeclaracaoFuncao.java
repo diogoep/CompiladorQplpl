@@ -48,10 +48,10 @@ public class DeclaracaoFuncao extends Declaracao {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[DeclaracaoFuncao]: {");
+        System.out.println("[Declaracao Funcao]: {");
 
         System.out.print(" ".repeat(depth*2));
-        System.out.println("Nome: " + this.identificadorFuncao + ", Tipo: " + this.tipo);
+        System.out.println("Identificador: " + this.identificadorFuncao + ", Tipo: " + this.tipo);
 
         parametros.printAtDepth(depth+1);
 

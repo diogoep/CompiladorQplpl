@@ -20,7 +20,7 @@ public class ParametroFormal extends TreeNode {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[ParametrosFormais]: {");
+        System.out.println("[Parametros Formais]: {");
 
         for(DeclaracaoVariavel e : parametros) {
             System.out.print(" ".repeat(depth*2));

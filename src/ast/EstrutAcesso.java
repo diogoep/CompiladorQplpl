@@ -10,12 +10,12 @@ public class EstrutAcesso extends TreeNode {
 
     private final TipoAcesso acesso;
     private final ArrayList<Declaracao> membros;
-    private final int linha;
+    private final int local;
 
     public EstrutAcesso(TipoAcesso acesso, ArrayList<Declaracao> membros, int linha) {
         this.acesso = acesso;
         this.membros = membros;
-        this.linha = linha;
+        this.local = linha;
     }
 
     public TipoAcesso getAcesso() {
@@ -26,15 +26,15 @@ public class EstrutAcesso extends TreeNode {
         return membros;
     }
 
-    public int getLinha(){return linha;}
+    public int getLinha(){return local;}
 
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[ChamadaFuncao]: {");
+        System.out.println("[Chamada Funcao]: {");
 
         System.out.print(" ".repeat(depth*2));
-        System.out.println("Tipo de acess: " + acesso);
+        System.out.println("Tipo de acesso: " + acesso);
 
 
         for(Declaracao me : membros){

@@ -33,7 +33,7 @@ public class ExpressaoBinaria extends Expressao {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[ExpressaoBinaria] " + this.operador);
+        System.out.println("[Expressao Binaria] " + this.operador);
         expressaoEsquerda.printAtDepth(depth+1);
         expressaoDireita.printAtDepth(depth+1);
     }

@@ -64,15 +64,16 @@ public class DeclaracaoAtributo extends Declaracao {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[DeclaracaoAtributo]: {");
+        System.out.println("[Declaracao Atributo]: {");
 
         System.out.print(" ".repeat(depth*2));
-        System.out.println("Nome: " + this.atributoId + ", Tipo: " + this.tipo);
+        System.out.println("Identificador: " + this.atributoId + ", Tipo: " + this.tipo);
 
         if(this.expressao != null){
             System.out.print(" ".repeat(depth*2));
-            expressao.printAtDepth(depth+1);
             System.out.println("Expressao:");
+            expressao.printAtDepth(depth+1);
+
 
         }
 

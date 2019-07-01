@@ -30,10 +30,10 @@ public class DeclaracaoEstrutura extends Declaracao {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[DeclaracaoEstrutura]: {");
+        System.out.println("[Declaracao Estrutura]: {");
 
         System.out.print(" ".repeat(depth*2));
-        System.out.println("Nome:" + this.identificador);
+        System.out.println("Identificador:" + this.identificador);
 
         for(DeclaracaoEstrutura ea : this.acessos){
             ea.printAtDepth(depth+1);

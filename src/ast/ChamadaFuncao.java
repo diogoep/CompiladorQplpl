@@ -47,10 +47,10 @@ public class ChamadaFuncao extends Identificador {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[ChamadaFuncao]: {");
+        System.out.println("[Chamada Funcao]: {");
 
         System.out.print(" ".repeat(depth*2));
-        System.out.println("Name: " + id);
+        System.out.println("Identificador: " + id);
 
         parametros.printAtDepth(depth+1);
 
@@ -64,8 +64,4 @@ public class ChamadaFuncao extends Identificador {
         System.out.println("}");
     }
 
-    @Override
-    public String getPid() {
-        return this.id;
-    }
 }

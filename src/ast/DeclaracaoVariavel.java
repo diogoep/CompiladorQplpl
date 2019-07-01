@@ -5,10 +5,8 @@ public class DeclaracaoVariavel extends Declaracao {
     private final Expressao expressao;
     private final Tipo tipo;
     private final int local;
-
     private final String tipoEstrutura;
-    //tipo pode ser int, char, string e tals.
-    //mas precisamos representar tambem as estruturas
+
 
 
     public DeclaracaoVariavel(Tipo tipo, String identificadorVariavel, int local) {
@@ -36,8 +34,6 @@ public class DeclaracaoVariavel extends Declaracao {
         this.local = local;
     }
 
-
-
     public String getTipoEstrutura(){
         return this.tipoEstrutura;
     }
@@ -62,15 +58,16 @@ public class DeclaracaoVariavel extends Declaracao {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[DeclaracaoVariavel]: {");
+        System.out.println("[Declaracao Variavel]: {");
 
         System.out.print(" ".repeat(depth*2));
-        System.out.println("Nome: " + this.identificadorVariavel + ", Tipo: " + this.tipo);
+        System.out.println("Identificador: " + this.identificadorVariavel + ", Tipo: " + this.tipo);
 
         if(expressao != null){
             System.out.print(" ".repeat(depth*2));
-            expressao.printAtDepth(depth+1);
             System.out.println("Expressao: ");
+            expressao.printAtDepth(depth+1);
+
 
         }
 

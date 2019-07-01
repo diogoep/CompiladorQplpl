@@ -32,10 +32,10 @@ public class ChamadaVariavel extends Identificador {
     @Override
     public void printAtDepth(int depth) {
         System.out.print(" ".repeat(depth*2));
-        System.out.println("[ChamadaVariavel]: {");
+        System.out.println("[Chamada de Variavel]: {");
 
         System.out.print(" ".repeat(depth*2));
-        System.out.println("Name: " + this.identificadorFuncao);
+        System.out.println("Identificador: " + this.identificadorFuncao);
 
         if(proximo != null){
             System.out.print(" ".repeat(depth*2));
@@ -45,10 +45,5 @@ public class ChamadaVariavel extends Identificador {
 
         System.out.print(" ".repeat(depth*2));
         System.out.println("}");
-    }
-
-    @Override
-    public String getPid() {
-        return this.identificadorFuncao;
     }
 }

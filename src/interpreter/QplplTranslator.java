@@ -9,13 +9,13 @@ import java.util.ArrayList;
 public class QplplTranslator extends QplplBaseVisitor<TreeNode> {
     //////////////////////////////programa///////////////////////////////////
     @Override
-    public Programa visitPrograma(QplplParser.ProgramaContext ctx) {
-        if(ctx.definicao().size() == 0) return new Programa();
+    public Codigo visitPrograma(QplplParser.ProgramaContext ctx) {
+        if(ctx.definicao().size() == 0) return new Codigo();
         ArrayList<Declaracao> definicoes = new ArrayList<>();
         for (QplplParser.DefinicaoContext def : ctx.definicao()){
             definicoes.add((Declaracao)visit(def));
         }
-        return new Programa(definicoes);
+        return new Codigo(definicoes);
     }
 ////////////////////////////////Declaracao//////////////////////////////////////
 
@@ -456,7 +456,7 @@ public class QplplTranslator extends QplplBaseVisitor<TreeNode> {
     @Override public Comando visitComandoSaida(QplplParser.ComandoSaidaContext ctx) { return (Comando) visit(ctx.saida()); }
     @Override public Comando visitComandoBreak(QplplParser.ComandoBreakContext ctx) { return new Break(ctx.getStart().getLine()); }
     @Override public Comando visitComandoExpressao(QplplParser.ComandoExpressaoContext ctx)
-    { return (Comando) new ComandoExpressao((Expressao) visit(ctx.expressao()), ctx.getStart().getLine()); }
+    { return new ComandoExpressao((Expressao) visit(ctx.expressao()), ctx.getStart().getLine()); }
 
 
 
