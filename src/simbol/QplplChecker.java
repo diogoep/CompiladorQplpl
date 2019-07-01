@@ -91,8 +91,11 @@ public class QplplChecker {
         if (!tabelaSimbolos.adicionarSimbolo(simboloFuncao, erro)) {
             erros.add(erro);
         }
-
-        visit(declaracaoFuncao.getBloco(), tabelaBloco, infoBloco);
+        InfoBloco infoBlocoFuncao = new InfoBloco(declaracaoFuncao.getTipo());
+        visit(declaracaoFuncao.getBloco(), tabelaBloco, infoBlocoFuncao);
+        if(!infoBlocoFuncao.garanteRetorno() && declaracaoFuncao.getTipo().getTipo() != TipoValor.VOID){
+            erros.add(new Erro("A função não garante retorno!", declaracaoFuncao.getLocal()));
+        }
 
     }
 
@@ -184,6 +187,9 @@ public class QplplChecker {
         if (condicional.getCodigoElse() != null) {
             InfoBloco infoBlocoNovoElse = new InfoBloco(infoBloco);
             visit(condicional.getCodigoElse(), tabelaBloco, infoBlocoNovoElse);
+            if(infoBlocoNovoElse.garanteRetorno() && infoBlocoNovoIf.garanteRetorno()){
+                infoBloco.setGaranteRetorno(true);
+            }
         }
     }
 
@@ -243,6 +249,7 @@ public class QplplChecker {
             Erro erro = new Erro("O tipo retornado pela expressao " +  infoExpressao.getTipoRetornado() + " é diferente do tipo esperado pela funcao " + infoBloco.getTipoRetorno(), retorno.getLocal());
             erros.add(erro);
         }
+        infoBloco.setGaranteRetorno(true);
         //TODO CHECAGEM DE ERRO
     }
 
