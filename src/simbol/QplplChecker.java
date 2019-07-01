@@ -2,6 +2,7 @@ package simbol;
 
 import ast.*;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
 
 public class QplplChecker {
@@ -25,7 +26,7 @@ public class QplplChecker {
         this.codigo = codigo;
     }
 
-    public void check() {
+    public void check(){
         this.tabelaGlobal = new TabelaSimbolos();
         this.erros = new ArrayList<>();
         this.visit(this.codigo, tabelaGlobal);
@@ -42,12 +43,13 @@ public class QplplChecker {
     }
 
     public void visit(Declaracao declaracao, TabelaSimbolos tabelaSimbolos) {
+
         if (declaracao instanceof DeclaracaoVariavel) {
             visit((DeclaracaoVariavel) declaracao, tabelaSimbolos);
         } else if (declaracao instanceof DeclaracaoFuncao) {
             visit((DeclaracaoFuncao) declaracao, tabelaSimbolos);
         }else if(declaracao instanceof DeclaracaoEstrutura){
-
+            //TODO NÃO VAI DAR NÃO
         }else if(declaracao instanceof DeclaracaoMetodo){
 
         }else if(declaracao instanceof DeclaracaoAtributo){
@@ -58,6 +60,7 @@ public class QplplChecker {
     public void visit(DeclaracaoFuncao declaracaoFuncao, TabelaSimbolos tabelaSimbolos) {
         SimboloFuncao simboloFuncao = new SimboloFuncao(declaracaoFuncao.getTipo(), declaracaoFuncao.getIdentificadorFuncao());
         TabelaSimbolos tabelaBloco = new TabelaSimbolos(tabelaSimbolos);
+        InfoBloco infoBloco = new InfoBloco(((DeclaracaoFuncao) declaracaoFuncao).getTipo());
         //TODO MAS UM BLOCO PODE TER TANTO DECLARACOES DE VARIAVEIS QUANTO COMANDOS, NÃO DEVEMOS IMPLEMENTAR A "VISITA" AOS COMANDOS NESSE CASO TAMBÉM?
         //Tratamento dos parametros da função
 
@@ -89,11 +92,11 @@ public class QplplChecker {
             erros.add(erro);
         }
 
-        visit(declaracaoFuncao.getBloco(), tabelaBloco);
+        visit(declaracaoFuncao.getBloco(), tabelaBloco, infoBloco);
 
     }
 
-    public void visit(DeclaracaoVariavel declaracaoVariavel, TabelaSimbolos tabelaSimbolos) {
+    public void visit(DeclaracaoVariavel declaracaoVariavel, TabelaSimbolos tabelaSimbolos, InfoBloco infoBloco) {
         SimboloVariavel simboloVariavel = new SimboloVariavel(declaracaoVariavel.getTipo(), declaracaoVariavel.getIdentificadorVariavel());
         Erro erro = new Erro("", declaracaoVariavel.getLocal());
         if (!tabelaSimbolos.adicionarSimbolo(simboloVariavel, erro)) {
@@ -117,41 +120,41 @@ public class QplplChecker {
 
     }
 
-    public void visit(Bloco bloco, TabelaSimbolos tabelaBloco) {
-
-        for (DeclaracaoVariavel declaracaoVariavel : bloco.getDefinicoes()) {
-            visit(declaracaoVariavel, tabelaBloco);
+    public void visit(Bloco bloco, TabelaSimbolos tabelaBloco, InfoBloco infoBloco) {
+        for (DeclaracaoVariavel declaracaoVariavel : bloco.getDefinicoes()){
+            visit(declaracaoVariavel, tabelaBloco, infoBloco);
         }
 
-        for (Comando comando : bloco.getComandos()) {
-            visit(comando, tabelaBloco);
+        for (Comando comando : bloco.getComandos()){
+            visit(comando, tabelaBloco, infoBloco);
         }
     }
 
-    public void visit(Comando comando, TabelaSimbolos tabelaBloco) {
+    public void visit(Comando comando, TabelaSimbolos tabelaBloco, InfoBloco infoBloco) {
 
         if (comando instanceof Atribuicao) {
-            visit((Atribuicao) comando, tabelaBloco);
+            visit((Atribuicao) comando, tabelaBloco, infoBloco);
         } else if (comando instanceof Break) {
-            visit((Break) comando, tabelaBloco);
+            visit((Break) comando, tabelaBloco, infoBloco);
         } else if (comando instanceof ComandoExpressao) {
-            visit((ComandoExpressao) comando, tabelaBloco);
+            visit((ComandoExpressao) comando, tabelaBloco, infoBloco);
         } else if (comando instanceof ComandoRepeticao) {
-            visit((ComandoRepeticao) comando, tabelaBloco);
+            visit((ComandoRepeticao) comando, tabelaBloco, infoBloco);
         } else if (comando instanceof Condicional) {
-            visit((Condicional) comando, tabelaBloco);
+            visit((Condicional) comando, tabelaBloco, infoBloco);
         } else if (comando instanceof Entrada) {
-            visit((Entrada) comando, tabelaBloco);
+            visit((Entrada) comando, tabelaBloco, infoBloco);
         } else if (comando instanceof Saida) {
-            visit((Saida) comando, tabelaBloco);
+            visit((Saida) comando, tabelaBloco, infoBloco);
         } else if (comando instanceof Retorno) {
-            visit((Retorno) comando, tabelaBloco);
+            visit((Retorno) comando, tabelaBloco, infoBloco);
         } else if (comando instanceof Bloco) {
-            visit((Bloco) comando, tabelaBloco);
+            TabelaSimbolos novoBloco = new TabelaSimbolos(tabelaBloco);
+            visit((Bloco) comando, novoBloco, infoBloco);
         }
     }
 
-    public void visit(Atribuicao atribuicao, TabelaSimbolos tabelaBloco) {
+    public void visit(Atribuicao atribuicao, TabelaSimbolos tabelaBloco, InfoBloco infoBloco) {
         InfoExpressao infoExpressao = new InfoExpressao();
         String identificador = "";
         if (atribuicao.getIdentificador() instanceof ChamadaFuncao){
@@ -168,7 +171,7 @@ public class QplplChecker {
         //TODO CHECAGEM DE TIPOS DO IDENTIFICADOR
     }
 
-    public void visit(Condicional condicional, TabelaSimbolos tabelaBloco) {
+    public void visit(Condicional condicional, TabelaSimbolos tabelaBloco, InfoBloco infoBloco) {
         InfoExpressao infoExpressao = new InfoExpressao();
         visit(condicional.getCondicao(), tabelaBloco, infoExpressao);
         if (infoExpressao.getTipoRetornado().getTipo() != TipoValor.BOOL) {
@@ -176,34 +179,41 @@ public class QplplChecker {
             erros.add(erro);
             System.err.println();
         }
-        visit(condicional.getCodigoIf(), tabelaBloco);
+        InfoBloco infoBlocoNovoIf = new InfoBloco(infoBloco);
+        visit(condicional.getCodigoIf(), tabelaBloco, infoBlocoNovoIf);
         if (condicional.getCodigoElse() != null) {
-            visit(condicional.getCodigoElse(), tabelaBloco);
+            InfoBloco infoBlocoNovoElse = new InfoBloco(infoBloco);
+            visit(condicional.getCodigoElse(), tabelaBloco, infoBlocoNovoElse);
         }
     }
 
-    public void visit(Break breique, TabelaSimbolos tabela) {
+    public void visit(Break breique, TabelaSimbolos tabela, InfoBloco infoBloco) {
+        if(infoBloco.dentroLaco()== false){
+            Erro erro = new Erro("Não é possível utilizar break fora de um laço!", breique.getLocal());
+            erros.add(erro);
+        }
         //TODO Verificar se está dentro do while
     }
 
-    public void visit(ComandoExpressao comandoExpressao, TabelaSimbolos tabelaBloco) {
+    public void visit(ComandoExpressao comandoExpressao, TabelaSimbolos tabelaBloco, InfoBloco infoBloco) {
         InfoExpressao infoExpressao = new InfoExpressao();
         visit(comandoExpressao.getExpressao(), tabelaBloco, infoExpressao);
     }
 
-    public void visit(ComandoRepeticao comandoRepeticao, TabelaSimbolos tabelaBloco) {
+    public void visit(ComandoRepeticao comandoRepeticao, TabelaSimbolos tabelaBloco, InfoBloco infoBloco) {
         InfoExpressao infoExpressao = new InfoExpressao();
         visit(comandoRepeticao.getCondicao(), tabelaBloco, infoExpressao);
         if (infoExpressao.getTipoRetornado().getTipo() != TipoValor.BOOL) {
             Erro erro = new Erro("A expressão não é do tipo bool! É do tipo" + infoExpressao.getTipoRetornado(), comandoRepeticao.getLocal());
             erros.add(erro);
         }
-
-        visit(comandoRepeticao.getComando(), tabelaBloco);
+        InfoBloco infoBlocoNovo = new InfoBloco(infoBloco);
+        infoBlocoNovo.setDentroLaco(true);
+        visit(comandoRepeticao.getComando(), tabelaBloco, infoBlocoNovo);
     }
 
     //CIN
-    public void visit(Entrada entrada, TabelaSimbolos tabelaBloco) {
+    public void visit(Entrada entrada, TabelaSimbolos tabelaBloco, InfoBloco infoBloco) {
         InfoExpressao infoExpressao = new InfoExpressao();
         for (Expressao expressao : entrada.getParametros()) {
             visit(expressao, tabelaBloco, infoExpressao);
@@ -215,7 +225,7 @@ public class QplplChecker {
     }
 
     //COUT
-    public void visit(Saida saida, TabelaSimbolos tabelaBloco) {
+    public void visit(Saida saida, TabelaSimbolos tabelaBloco, InfoBloco infoBloco) {
         InfoExpressao infoExpressao = new InfoExpressao();
         for (Expressao expressao : saida.getParametros()) {
             visit(expressao, tabelaBloco, infoExpressao);
@@ -226,9 +236,13 @@ public class QplplChecker {
         }
     }
 
-    public void visit(Retorno retorno, TabelaSimbolos tabelaBloco) {
+    public void visit(Retorno retorno, TabelaSimbolos tabelaBloco, InfoBloco infoBloco) {
         InfoExpressao infoExpressao = new InfoExpressao();
         visit(retorno.getExpressao(), tabelaBloco, infoExpressao);
+        if(!infoExpressao.getTipoRetornado().equals(infoBloco.getTipoRetorno())){
+            Erro erro = new Erro("O tipo retornado pela expressao " +  infoExpressao.getTipoRetornado() + " é diferente do tipo esperado pela funcao " + infoBloco.getTipoRetorno(), retorno.getLocal());
+            erros.add(erro);
+        }
         //TODO CHECAGEM DE ERRO
     }
 

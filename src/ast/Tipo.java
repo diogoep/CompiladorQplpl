@@ -35,9 +35,9 @@ public class Tipo extends TreeNode {
         }else if(tipo == TipoValor.INTEIRO){
             valor += "int";
         }else if (tipo == TipoValor.CHAR){
-            valor += "bool";
-        }else if (tipo == TipoValor.BOOL){
             valor += "char";
+        }else if (tipo == TipoValor.BOOL){
+            valor += "bool";
         }else if (tipo == TipoValor.VOID){
             valor += "void";
         }else if (tipo == TipoValor.ESTRUTURA){

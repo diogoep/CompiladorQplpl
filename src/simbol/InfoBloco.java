@@ -4,31 +4,31 @@ package simbol;
 import ast.*;
 
 
-public class InfoSemanticaBloco {
+public class InfoBloco {
 
 
-    private boolean garanteRetorno; 
-    private boolean dentroLaco;    
-    private Tipo tipoRetorno;
+    private boolean garanteRetorno; //saber se esse bloco tem retorna concert
+    private boolean dentroLaco;     //saber se pode usar um break
+    private Tipo tipoRetorno;       //vc ta dentro de uma funcao, entao vc precisa saber o tipo da funcao. Caso voce use um return
 
 
-    public InfoSemanticaBloco(Tipo tipoRetorno){
+    public InfoBloco(Tipo tipoRetorno){
         this.garanteRetorno = false;
         this.dentroLaco = false;
         this.tipoRetorno = tipoRetorno;
     }
 
-    public InfoSemanticaBloco(boolean dentroLaco, Tipo tipoRetorno){
+    public InfoBloco(boolean dentroLaco, Tipo tipoRetorno){
         this.garanteRetorno = false;
         this.dentroLaco = dentroLaco;
         this.tipoRetorno = tipoRetorno;
     }
 
     
-    public InfoSemanticaBloco(InfoSemanticaBloco other){
+    public InfoBloco(InfoBloco outro){
         this.garanteRetorno = false;
-        this.dentroLaco = other.dentroLaco();
-        this.tipoRetorno = other.getTipoRetorno();
+        this.dentroLaco = outro.dentroLaco();
+        this.tipoRetorno = outro.getTipoRetorno();
     }
 
 
