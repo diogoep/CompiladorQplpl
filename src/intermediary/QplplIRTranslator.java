@@ -30,10 +30,15 @@ public class QplplIRTranslator{
             return null;
         }
 
-        Quadrupla resultado = visit(bloco.getComandos().get(0));
-
-        for(int i = 1; i < bloco.getComandos().size(); i++){
-            resultado.join(visit(bloco.getComandos().get(i)));
+        Quadrupla resultado = null;
+        for(int i = 0; i < bloco.getComandos().size(); i++){
+            Quadrupla noAtual = visit(bloco.getComandos().get(i));
+            if(resultado == null && noAtual != null) {
+                    resultado = noAtual;
+                    break;
+            }else if(resultado != null && noAtual != null) {
+                    resultado.join(noAtual);
+            }
         }
         return resultado;
     }
@@ -49,6 +54,12 @@ public class QplplIRTranslator{
             return visit((ComandoExpressao) comando);
         }else if(comando instanceof Condicional){
             return visit((Condicional) comando);
+        }else if(comando instanceof Entrada){
+            return null;
+        }else if(comando instanceof Retorno){
+            return null;
+        }else if(comando instanceof Saida){
+            return null;
         }
         return null;
     }
@@ -115,7 +126,7 @@ public class QplplIRTranslator{
             Quadrupla label3 = new Quadrupla(Operador.LABEL, "", "", L3);
             Quadrupla testeCondicao = new Quadrupla(Operador.IFFALSEGOTO, condicao.getFinalLista().getDestino(),"", L2);
             Quadrupla fim = new Quadrupla(Operador.GOTO, "","", L3);
-            //System.out.println("forkforkfor"); System.err.println(comandoElse.mostrarCodigo());
+
             label1.join(condicao);
             label1.join(testeCondicao);
             label1.join(comandoIf);
@@ -221,7 +232,6 @@ public class QplplIRTranslator{
 
 
 
-    //TODO CHECAGEM DE RETORNO NO CHECKER
 public Operador conversaoOperador(OperadorBinario operadorBinario){
         if(operadorBinario == OperadorBinario.IGUAL){
             return Operador.IGUAL;

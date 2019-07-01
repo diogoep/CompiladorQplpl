@@ -1,19 +1,16 @@
 int main(){
-
     int x = 1;
     int e = 5;
     bool t = true;
-
-    if(t){
-        int x = 4;
-        x = x * 2;
-        e = e - 1;
-        return 2;
-    } else {
-        x = x / 2;
-        e = e + 1;
-
-    }
-
-
+    std::cin >> t;
+        if(t){
+            int x = 4;
+            x = x * 2;
+            e = e - 1;
+            return 2;
+        } else {
+            x = x / 2;
+            e = e + 1;
+            return 4;
+        }
 }

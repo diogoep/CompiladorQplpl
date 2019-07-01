@@ -3,11 +3,6 @@ package ast;
 import java.util.ArrayList;
 
 public class EstrutAcesso extends TreeNode {
-
-
-
-
-
     private final TipoAcesso acesso;
     private final ArrayList<Declaracao> membros;
     private final int local;

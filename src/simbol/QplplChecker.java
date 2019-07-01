@@ -12,11 +12,19 @@ public class QplplChecker {
     private int quantidadePrincipal;
 
 
+    public int getQuantidadePrincipal() {
+        return quantidadePrincipal;
+    }
+
+    public void setQuantidadePrincipal(int quantidadePrincipal) {
+        this.quantidadePrincipal = quantidadePrincipal;
+    }
+
     public DeclaracaoFuncao getPrincipal() {
         return principal;
     }
 
-    public void setPrinipal(DeclaracaoFuncao principal) {
+    public void setPrincipal(DeclaracaoFuncao principal) {
         this.principal = principal;
     }
 
@@ -50,9 +58,9 @@ public class QplplChecker {
         }else if(declaracao instanceof DeclaracaoEstrutura){
             //TODO NÃO VAI DAR NÃO
         }else if(declaracao instanceof DeclaracaoMetodo){
-
+            //TODO NÃO VAI DAR NÃO
         }else if(declaracao instanceof DeclaracaoAtributo){
-
+            //TODO NÃO VAI DAR NÃO
         }
     }
 
@@ -199,6 +207,7 @@ public class QplplChecker {
             Erro erro = new Erro("A expressão não é do tipo bool! É do tipo" + infoExpressao.getTipoRetornado(), comandoRepeticao.getLocal());
             erros.add(erro);
         }
+
         InfoBloco infoBlocoNovo = new InfoBloco(infoBloco);
         infoBlocoNovo.setDentroLaco(true);
         visit(comandoRepeticao.getComando(), tabelaBloco, infoBlocoNovo);

@@ -71,7 +71,7 @@ public class DeclaracaoAtributo extends Declaracao {
 
         if(this.expressao != null){
             System.out.print(" ".repeat(depth*2));
-            System.out.println("Expressao:");
+            System.out.println("Expressao: ");
             expressao.printAtDepth(depth+1);
 
 
