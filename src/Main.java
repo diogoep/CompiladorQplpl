@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            QplplLexer lexer = new QplplLexer(CharStreams.fromFileName("/home/diogo/Downloads/QPP1-master/src/teste.txt"));
+            QplplLexer lexer = new QplplLexer(CharStreams.fromFileName("/home/diogo/Downloads/Qplpl/src/teste.txt"));
 
             QplplParser parser = new QplplParser(new CommonTokenStream(lexer));
             QplplParser.ProgramaContext ctx = parser.programa();
