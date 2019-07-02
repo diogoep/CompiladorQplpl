@@ -35,7 +35,6 @@ public class QplplIRTranslator{
             Quadrupla noAtual = visit(bloco.getComandos().get(i));
             if(resultado == null && noAtual != null) {
                     resultado = noAtual;
-                    break;
             }else if(resultado != null && noAtual != null) {
                     resultado.join(noAtual);
             }
@@ -193,7 +192,7 @@ public class QplplIRTranslator{
 
     public Quadrupla visit(ExpressaoBinaria expressaoBinaria){
         Quadrupla quadruplaEsquerda = visit(expressaoBinaria.getExpressaoEsquerda());
-        Quadrupla quadruplaDireita = visit (expressaoBinaria.getExpressaoDireita ());
+        Quadrupla quadruplaDireita = visit(expressaoBinaria.getExpressaoDireita ());
 
         String temporarioRespostaEsquerda = quadruplaEsquerda.getFinalLista().getDestino();
         String temporarioRespostaDireita  = quadruplaDireita.getFinalLista().getDestino();
